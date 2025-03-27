@@ -1,6 +1,0 @@
-/home/woo/project/MarketDAQ/build/CMakeFiles/main.dir
-/home/woo/project/MarketDAQ/build/CMakeFiles/edit_cache.dir
-/home/woo/project/MarketDAQ/build/CMakeFiles/rebuild_cache.dir
-/home/woo/project/MarketDAQ/build/lib/CMakeFiles/imgui.dir
-/home/woo/project/MarketDAQ/build/lib/CMakeFiles/edit_cache.dir
-/home/woo/project/MarketDAQ/build/lib/CMakeFiles/rebuild_cache.dir
