@@ -54,7 +54,7 @@ int main() {
 
         // 렌더링
         ImGui::Render();
-        glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
+        glClearColor(0.40f, 0.50f, 0.55f, 1.00f);
         glClear(GL_COLOR_BUFFER_BIT);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 

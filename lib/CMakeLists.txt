@@ -2,7 +2,6 @@
 message("LIBRARY TARGET: ImGUI")
 
 find_package(glfw3 REQUIRED)
-
 set(OpenGL_GL_PREFERENCE GLVND)
 find_package(OpenGL REQUIRED)
 
@@ -21,3 +20,7 @@ add_library(imgui STATIC
 
 target_include_directories(imgui PUBLIC imgui imgui/backends)
 target_link_libraries(imgui PUBLIC glfw OpenGL::GL dl)
+
+# CURL
+message("LIBRARY TARGET: CURL")
+find_package(CURL REQUIRED)
