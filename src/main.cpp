@@ -15,7 +15,7 @@ int main() {
     // GLFW 윈도우와 OpenGL 컨텍스트 생성
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "ImGui Demo", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(1280, 720, "MarketDAQ", NULL, NULL);
     if (window == NULL) {
         fprintf(stderr, "Failed to create GLFW window\n");
         glfwTerminate();

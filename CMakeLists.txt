@@ -25,7 +25,7 @@ endif()
 
 if(RELEASE)
     message(STATUS "EXECUTABLE TARGET: RELEASE")
-    add_executable(MarketDAQ src/MarketDAQ.cpp)
+    add_executable(MarketDAQ src/main.cpp)
 endif()
 
 # add library directory to project
