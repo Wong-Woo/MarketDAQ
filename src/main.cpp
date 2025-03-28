@@ -25,8 +25,6 @@ int main() {
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1); // Enable vsync
 
-    // OpenGL 함수 로딩 (GLEW 없이 수동으로 로딩할 수 있습니다. 그러나 최신 OpenGL 기능을 사용하려면 수동 로딩이 필요합니다.)
-
     // ImGui 초기화
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
