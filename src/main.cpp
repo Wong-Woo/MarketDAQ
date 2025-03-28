@@ -3,6 +3,7 @@
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
 #include <stdio.h>
+#include "single_include/nlohmann/json.hpp"
 
 int main() {
     // GLFW 초기화

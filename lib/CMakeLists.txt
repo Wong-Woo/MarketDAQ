@@ -24,3 +24,6 @@ target_link_libraries(imgui PUBLIC glfw OpenGL::GL dl)
 # CURL
 message("LIBRARY TARGET: CURL")
 find_package(CURL REQUIRED)
+
+# JSON
+message("LIBRARY TARGET: JSON")

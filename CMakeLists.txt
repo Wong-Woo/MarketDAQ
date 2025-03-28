@@ -29,6 +29,7 @@ if(RELEASE)
 endif()
 
 # add library directory to project
-target_include_directories(main PUBLIC lib/imgui lib/imgui/backends)
+target_include_directories(main PUBLIC lib/imgui lib/imgui/backends lib/json)
 target_link_directories(main PRIVATE ${CMAKE_BINARY_DIR}/lib/imgui)
 target_link_libraries(main PRIVATE imgui curl)
+
