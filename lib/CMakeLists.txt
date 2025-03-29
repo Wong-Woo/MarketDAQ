@@ -1,29 +1,45 @@
 # ImGUI
-message("LIBRARY TARGET: ImGUI")
+list(FIND BUILD_LIBRARIES imgui imgui_index)
+if(${imgui_index} GREATER_EQUAL 0)
+    message("LIBRARY TARGET: ImGUI")
+    find_package(glfw3 REQUIRED)
+    set(OpenGL_GL_PREFERENCE GLVND)
+    find_package(OpenGL REQUIRED)
 
-find_package(glfw3 REQUIRED)
-set(OpenGL_GL_PREFERENCE GLVND)
-find_package(OpenGL REQUIRED)
+    add_library(imgui STATIC
+        imgui/imgui.cpp
+        imgui/imgui_demo.cpp
+        imgui/imgui_draw.cpp
+        imgui/imgui_tables.cpp
+        imgui/imgui_widgets.cpp
+        imgui/backends/imgui_impl_glfw.cpp
+        imgui/backends/imgui_impl_opengl3.cpp
+        implot/implot.cpp
+        implot/implot_demo.cpp
+        implot/implot_items.cpp
+    )
 
-add_library(imgui STATIC
-    imgui/imgui.cpp
-    imgui/imgui_demo.cpp
-    imgui/imgui_draw.cpp
-    imgui/imgui_tables.cpp
-    imgui/imgui_widgets.cpp
-    imgui/backends/imgui_impl_glfw.cpp
-    imgui/backends/imgui_impl_opengl3.cpp
-    implot/implot.cpp
-    implot/implot_demo.cpp
-    implot/implot_items.cpp
-)
+    target_include_directories(imgui PUBLIC imgui imgui/backends)
+    target_link_libraries(imgui PUBLIC glfw OpenGL::GL dl)
 
-target_include_directories(imgui PUBLIC imgui imgui/backends)
-target_link_libraries(imgui PUBLIC glfw OpenGL::GL dl)
+    list(APPEND INCLUDE_DIRECTORIES lib/imgui lib/imgui/backends)
+    list(APPEND LINK_DIRECTORIES ${CMAKE_BINARY_DIR}/lib/imgui)
+    list(APPEND LINK_LIBRARIES imgui)
+endif()
 
 # CURL
-message("LIBRARY TARGET: CURL")
-find_package(CURL REQUIRED)
+list(FIND BUILD_LIBRARIES curl curl_index)
+if(${curl_index} GREATER_EQUAL 0)
+    message("LIBRARY TARGET: CURL")
+    find_package(CURL REQUIRED)
+
+    list(APPEND LINK_LIBRARIES curl)
+endif()
 
 # JSON
-message("LIBRARY TARGET: JSON")
+list(APPEND INCLUDE_DIRECTORIES lib/json)
+
+# Make directory configuration shared with parent cmake file.
+set(INCLUDE_DIRECTORIES ${INCLUDE_DIRECTORIES} PARENT_SCOPE)
+set(LINK_DIRECTORIES ${LINK_DIRECTORIES} PARENT_SCOPE)
+set(LINK_LIBRARIES ${LINK_LIBRARIES} PARENT_SCOPE)
