@@ -39,11 +39,6 @@ if(TEST_CURL)
     add_executable(MarketDAQ test/TEST_CURL.cpp)
 endif()
 
-message("outer")
-foreach(FILE IN LISTS INCLUDE_DIRECTORIES)
-	message(${FILE} " is in the list outer")
-endforeach()
-
 target_include_directories(MarketDAQ PUBLIC ${INCLUDE_DIRECTORIES})
 target_link_directories(MarketDAQ PRIVATE ${LINK_DIRECTORIES})
 target_link_libraries(MarketDAQ PRIVATE ${LINK_LIBRARIES})
