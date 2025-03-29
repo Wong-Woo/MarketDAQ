@@ -39,7 +39,7 @@ endif()
 # JSON
 list(APPEND INCLUDE_DIRECTORIES lib/json)
 
-# Make directory configuration shared with parent cmake file.
+# make directory configuration shared with parent cmake file.
 set(INCLUDE_DIRECTORIES ${INCLUDE_DIRECTORIES} PARENT_SCOPE)
 set(LINK_DIRECTORIES ${LINK_DIRECTORIES} PARENT_SCOPE)
 set(LINK_LIBRARIES ${LINK_LIBRARIES} PARENT_SCOPE)
