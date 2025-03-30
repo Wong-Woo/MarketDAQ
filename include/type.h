@@ -1,10 +1,21 @@
 #include <string>
 #include <vector>
+#include <list>
 #include <memory>
 #include <chrono>
 
+enum CurrencyUnit {
+    USD,
+    EUR,
+    CNY,
+    GBP,
+    JPY,
+    KRW,
+    BTC,
+};
+
 class StockPrice {
-    std::time_t timestamp;
+    uint64_t timestamp;
     double open;
     double high;
     double low;
@@ -13,11 +24,12 @@ class StockPrice {
 };
 
 class StockData {
-    std::string symbol;
-    std::string last_updated;
-    std::string time_zone;
-    std::string time_unit;
-    std::string price_unit;
+    std::string ticker;
+    uint64_t last_updated_timestamp;
+    CurrencyUnit currency_unit;
+    std::unique_ptr<std::vector<StockPrice>> prices;
+};
 
-    std::vector<std::unique_ptr<StockPrice>> prices;
+class StockDataBase {
+    std::unique_ptr<std::list<StockData>> stocks;
 };
