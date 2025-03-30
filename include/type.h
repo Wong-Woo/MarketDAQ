@@ -31,10 +31,10 @@ class StockPrice {
 };
 
 class StockData {
-    std::string ticker;
     uint64_t last_updated_timestamp;
-    CurrencyUnit currency_unit;
+    std::string ticker;
     std::unique_ptr<std::vector<StockPrice>> prices;
+    CurrencyUnit currency_unit;
 };
 
 class StockDataBase {
