@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 option(RELEASE "Build RELEASE" OFF)
 option(TEST_IMGUI "Build TEST_IMGUI" OFF)
 option(TEST_IMGUI "Build TEST_CURL" OFF)
+option(TEST_FSTREAM "Build TEST_FSTREAM" OFF)
 
 # list for dependenciy management
 set(BUILD_LIBRARIES)
@@ -19,6 +20,9 @@ if(TEST_IMGUI)
 endif()
 if(TEST_CURL)
     list(APPEND BUILD_LIBRARIES curl)
+endif()
+if(TEST_FSTREAM)
+    list(APPEND BUILD_LIBRARIES json)
 endif()
 
 # add library directory to project
@@ -37,6 +41,10 @@ endif()
 if(TEST_CURL)
     message(STATUS "EXECUTABLE TARGET: TEST_CURL")
     add_executable(MarketDAQ test/TEST_CURL.cpp)
+endif()
+if(TEST_FSTREAM)
+    message(STATUS "EXECUTABLE TARGET: TEST_FSTREAM")
+    add_executable(MarketDAQ test/TEST_FSTREAM.cpp)
 endif()
 
 target_include_directories(MarketDAQ PUBLIC ${INCLUDE_DIRECTORIES})

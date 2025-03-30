@@ -1,9 +1,0 @@
-#include <iostream>
-#include "type.h"
-
-int main() {
-
-    
-
-    return 0;
-}
