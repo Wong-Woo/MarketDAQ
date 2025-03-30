@@ -4,6 +4,13 @@
 #include <memory>
 #include <chrono>
 
+/*
+STOCK DATA TYPE DESIGN
+- design stock data sereialized for performance.
+- design stock data base as double linked list for ram efficiency.
+    - not used stock data will be deleted from memory.
+*/
+
 enum CurrencyUnit {
     USD,
     EUR,
