@@ -3,6 +3,7 @@
 #include <list>
 #include <memory>
 #include <chrono>
+#include <iostream>
 #include <fstream>
 #include "config.h"
 
@@ -28,7 +29,10 @@ private:
     std::unique_ptr<std::vector<StockPrice>> prices;
     CurrencyUnit currency_unit;
 
-    StockData() : last_updated_timestamp(0), currency_unit(USD), prices(std::make_unique<std::vector<StockPrice>>()) {}
+public:
+    StockData(std::string ticker_path) {
+
+    }
     StockData(const StockData& other)
         : last_updated_timestamp(other.last_updated_timestamp),
           ticker(other.ticker),
@@ -45,7 +49,7 @@ private:
 class StockDataBase {
 private:
     std::unique_ptr<std::list<StockData>> stocks;
-
+public:
     StockDataBase() : stocks(std::make_unique<std::list<StockData>>()) {}
     StockDataBase(const StockDataBase& other)
         : stocks(std::make_unique<std::list<StockData>>(*other.stocks)) {}
@@ -56,7 +60,14 @@ private:
     void add_stock(std::string ticker, std::string db_path = BASIC_STOCK_DB_PATH) {
         if(db_path.back() != DIR_SEPARATOR) db_path.push_back(DIR_SEPARATOR);
 
-        std::ifstream stock_file(db_path+ticker+".json");
-        //working
+        std::ifstream stock_file(db_path + ticker + ".json");
+        // if(!stock_file) // try http-get request from alpha-vantage server
+        if(!stock_file) std::cerr << "can not find \"" << ticker << ".json\" in \"" << db_path << "\"."<<std::endl;
+
+        // std::string stock_data = stock_file.rdbuf();
+
+        // StockData stock(ticker_path);
+
+
     }
 };

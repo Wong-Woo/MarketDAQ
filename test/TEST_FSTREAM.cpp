@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <filesystem>
+#include "single_include/nlohmann/json.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -18,19 +19,17 @@ int main(int argc, char *argv[])
         std::cerr << "파일을 찾을 수 없음" << std::endl;
         return -1;
     }
-    std::string line;
-    while (std::getline(test_aapl, line))
-    {
-        std::cout << line << std::endl;
-    }
-    test_aapl.close();
+    std::stringstream content;
+    content << test_aapl.rdbuf();
+    std::cout << content.str();
 
     // PATH 편집 테스트
     std::string test_path("data/stock");
     if (test_path.back() != '/') test_path.push_back('/');
     std::cout << test_path << std::endl;
     
-    //
+    // Path separator 테스트
     std::cout << "Path separator: " << std::filesystem::path::preferred_separator << std::endl;
+
     return 0;
 }
