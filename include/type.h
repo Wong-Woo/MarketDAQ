@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include "config.h"
+#include "single_include/nlohmann/json.hpp"
 
 enum CurrencyUnit {
     USD, EUR, CNY, GBP, JPY, KRW, BTC
@@ -30,8 +31,24 @@ private:
     CurrencyUnit currency_unit;
 
 public:
-    StockData(std::string ticker_path) {
+    StockData(nlohmann::json&& stock_json) : ticker(stock_json["Meta Data"]["2. Symbol"]) {
+        // initialize last updated timestamp
+        // gonna make magic number to constant number(literal)
+        std::string last_updated_date = stock_json["Meta Data"]["Last Refreshed"].get<std::string>();
+        std::tm timeinfo = {0};
+        timeinfo.tm_year = std::stoi(last_updated_date.substr(0,4)) - 1900;
+        timeinfo.tm_mon = std::stoi(last_updated_date.substr(5,2));
+        timeinfo.tm_mday = std::stoi(last_updated_date.substr(8,2));
+        last_updated_timestamp = std::mktime(&timeinfo);
 
+        // initialize currency_unit
+        // usd only yet
+        currency_unit = USD;
+
+        // initialize prices
+        for(auto it = stock_json["Time Series (Daily)"].begin(); it != stock_json["Time Series (Daily)"].end(); it++) {
+            std::cout<< *it <<std::endl;
+        }
     }
     StockData(const StockData& other)
         : last_updated_timestamp(other.last_updated_timestamp),
@@ -64,10 +81,9 @@ public:
         // if(!stock_file) // try http-get request from alpha-vantage server
         if(!stock_file) std::cerr << "can not find \"" << ticker << ".json\" in \"" << db_path << "\"."<<std::endl;
 
-        // std::string stock_data = stock_file.rdbuf();
-
-        // StockData stock(ticker_path);
-
+        nlohmann::json stock_json; stock_file >> stock_json;
+        
+        StockData stock_data(std::move(stock_json));
 
     }
 };
