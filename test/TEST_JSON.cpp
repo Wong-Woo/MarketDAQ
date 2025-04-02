@@ -2,6 +2,7 @@
 #include <fstream>
 #include "single_include/nlohmann/json.hpp"
 #include "config.h"
+#include "type.h"
 
 int main()
 {
@@ -18,7 +19,11 @@ int main()
     std::cout << test[0];
 
     for(auto it = aapl_json["Time Series (Daily)"].begin(); it != aapl_json["Time Series (Daily)"].end(); it++) {
-        std::cout<< *it <<std::endl;
+        std::cout<< it.key() <<std::endl;
     }
+
+    StockDataBase mybase;
+    mybase.add_stock("AAPL");
+    std::cout<< (*((*(mybase.stocks)).front().prices)).front().timestamp;
     return 0;
 }

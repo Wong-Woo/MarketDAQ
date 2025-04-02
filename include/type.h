@@ -5,6 +5,7 @@
 #include <chrono>
 #include <iostream>
 #include <fstream>
+#include <regex>
 #include "config.h"
 #include "single_include/nlohmann/json.hpp"
 
@@ -12,42 +13,58 @@ enum CurrencyUnit {
     USD, EUR, CNY, GBP, JPY, KRW, BTC
 };
 
+uint64_t date2timestamp(std::string date) {
+    std::regex date_regex(R"(\d\d\d\d)-(\d\d)-(\d\d)");
+    std::smatch captured;
+    if(std::regex_match(date, captured, date_regex)) {
+        u_int32_t year = std::stoi(captured[1].str());
+        u_int32_t month = std::stoi(captured[2].str());
+        u_int32_t day = std::stoi(captured[3].str());
+
+        std::tm timeinfo = {0};
+        timeinfo.tm_year = year - 1900;
+        timeinfo.tm_mon = month - 1;
+        timeinfo.tm_mday = day;
+        return std::mktime(&timeinfo);
+    } else {
+        std::cerr << "Can't match the date form" << std::endl;
+        return 0;
+    }
+}
+
 class StockPrice {
-private:
+    public:
     uint64_t timestamp;
     double open, high, low, close, volume;
 
-    StockPrice() : timestamp(0), open(0), high(0), low(0), close(0), volume(0) {}
+    StockPrice(uint64_t timestamp, double open, double high, double low, double close, double volume) 
+        : timestamp(timestamp), open(open), high(high), low(low), close(close), volume(volume) {}
     StockPrice(const StockPrice& other) = default;
     StockPrice(StockPrice&& other) noexcept = default;
     ~StockPrice() = default;
 };
 
 class StockData {
-private:
+public:
     uint64_t last_updated_timestamp;
     std::string ticker;
     std::unique_ptr<std::vector<StockPrice>> prices;
     CurrencyUnit currency_unit;
-
-public:
-    StockData(nlohmann::json&& stock_json) : ticker(stock_json["Meta Data"]["2. Symbol"]) {
+    StockData(nlohmann::json&& stock_json) 
+        : ticker(stock_json["Meta Data"]["2. Symbol"]), prices(std::make_unique<std::vector<StockPrice>>()) {
         // initialize last updated timestamp
-        // gonna make magic number to constant number(literal)
         std::string last_updated_date = stock_json["Meta Data"]["Last Refreshed"].get<std::string>();
-        std::tm timeinfo = {0};
-        timeinfo.tm_year = std::stoi(last_updated_date.substr(0,4)) - 1900;
-        timeinfo.tm_mon = std::stoi(last_updated_date.substr(5,2));
-        timeinfo.tm_mday = std::stoi(last_updated_date.substr(8,2));
-        last_updated_timestamp = std::mktime(&timeinfo);
+        last_updated_timestamp = date2timestamp(last_updated_date);
 
         // initialize currency_unit
         // usd only yet
         currency_unit = USD;
 
         // initialize prices
-        for(auto it = stock_json["Time Series (Daily)"].begin(); it != stock_json["Time Series (Daily)"].end(); it++) {
-            std::cout<< *it <<std::endl;
+        auto stock_data_series = stock_json["Time Series (Daily)"];
+        for(auto it = stock_data_series.begin(); it != stock_data_series.end(); it++) {
+            StockPrice price(date2timestamp(it.key()),(*it)["1. open"].get<double>(),(*it)["2. high"].get<double>(),(*it)["3. low"].get<double>(), (*it)["4. close"].get<double>(),(*it)["5. volume"].get<double>());
+            (*prices).push_back(price);
         }
     }
     StockData(const StockData& other)
@@ -64,9 +81,8 @@ public:
 };
 
 class StockDataBase {
-private:
-    std::unique_ptr<std::list<StockData>> stocks;
 public:
+    std::unique_ptr<std::list<StockData>> stocks;
     StockDataBase() : stocks(std::make_unique<std::list<StockData>>()) {}
     StockDataBase(const StockDataBase& other)
         : stocks(std::make_unique<std::list<StockData>>(*other.stocks)) {}
@@ -84,6 +100,6 @@ public:
         nlohmann::json stock_json; stock_file >> stock_json;
         
         StockData stock_data(std::move(stock_json));
-
+        (*stocks).push_back(stock_data);
     }
 };
