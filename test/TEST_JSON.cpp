@@ -24,6 +24,7 @@ int main()
 
     StockDataBase mybase;
     mybase.add_stock("AAPL");
+    std::cout<<"OK"<<std::endl;
     std::cout<< (*((*(mybase.stocks)).front().prices)).front().timestamp;
     return 0;
 }

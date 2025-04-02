@@ -14,7 +14,7 @@ enum CurrencyUnit {
 };
 
 uint64_t date2timestamp(std::string date) {
-    std::regex date_regex(R"(\d\d\d\d)-(\d\d)-(\d\d)");
+    std::regex date_regex(R"((\d\d\d\d)-(\d\d)-(\d\d))");
     std::smatch captured;
     if(std::regex_match(date, captured, date_regex)) {
         u_int32_t year = std::stoi(captured[1].str());
@@ -53,17 +53,22 @@ public:
     StockData(nlohmann::json&& stock_json) 
         : ticker(stock_json["Meta Data"]["2. Symbol"]), prices(std::make_unique<std::vector<StockPrice>>()) {
         // initialize last updated timestamp
-        std::string last_updated_date = stock_json["Meta Data"]["Last Refreshed"].get<std::string>();
+        std::string last_updated_date = stock_json["Meta Data"]["3. Last Refreshed"].get<std::string>();
         last_updated_timestamp = date2timestamp(last_updated_date);
-
         // initialize currency_unit
         // usd only yet
         currency_unit = USD;
-
+        
         // initialize prices
         auto stock_data_series = stock_json["Time Series (Daily)"];
         for(auto it = stock_data_series.begin(); it != stock_data_series.end(); it++) {
-            StockPrice price(date2timestamp(it.key()),(*it)["1. open"].get<double>(),(*it)["2. high"].get<double>(),(*it)["3. low"].get<double>(), (*it)["4. close"].get<double>(),(*it)["5. volume"].get<double>());
+            StockPrice price(   date2timestamp(it.key()),
+                                std::stod((*it)["1. open"].get<std::string>()),
+                                std::stod((*it)["2. high"].get<std::string>()),
+                                std::stod((*it)["3. low"].get<std::string>()), 
+                                std::stod((*it)["4. close"].get<std::string>()),
+                                std::stod((*it)["5. volume"].get<std::string>())
+                            );
             (*prices).push_back(price);
         }
     }
