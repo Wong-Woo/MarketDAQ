@@ -2,8 +2,9 @@
 #include "imgui.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
-#include <stdio.h>
+// #include <stdio.h>
 #include "single_include/nlohmann/json.hpp"
+#include "gui.h"
 
 int main() {
     // GLFW 초기화
@@ -49,7 +50,9 @@ int main() {
         ImGui::NewFrame();
 
         // ImGui 데모 창 표시
-        ImGui::ShowDemoWindow();
+        plot_window();
+        select_window();
+        news_window();
 
         // 렌더링
         ImGui::Render();

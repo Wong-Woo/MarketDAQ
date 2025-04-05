@@ -19,10 +19,10 @@ if(${imgui_index} GREATER_EQUAL 0)
         implot/implot_items.cpp
     )
 
-    target_include_directories(imgui PUBLIC imgui imgui/backends)
+    target_include_directories(imgui PUBLIC imgui imgui/backends implot)
     target_link_libraries(imgui PUBLIC glfw OpenGL::GL dl)
 
-    list(APPEND INCLUDE_DIRECTORIES lib/imgui lib/imgui/backends)
+    list(APPEND INCLUDE_DIRECTORIES lib/imgui lib/imgui/backends lib/implot)
     list(APPEND LINK_DIRECTORIES ${CMAKE_BINARY_DIR}/lib/imgui)
     list(APPEND LINK_LIBRARIES imgui)
 endif()

@@ -36,7 +36,7 @@ add_subdirectory(lib)
 # target definition by option
 if(RELEASE)
     message(STATUS "EXECUTABLE TARGET: RELEASE")
-    add_executable(MarketDAQ src/main.cpp)
+    add_executable(MarketDAQ src/main.cpp src/gui.cpp)
 endif()
 if(TEST_IMGUI)
     message(STATUS "EXECUTABLE TARGET: TEST_IMGUI")
