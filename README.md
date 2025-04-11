@@ -1,6 +1,6 @@
-![Linux Release](https://github.com/Wong-Woo/MarketDAQ/actions/workflows/release.yml/badge.svg?branch=main&label=Linux%20Release&event=push)
-![Windows Release](https://github.com/Wong-Woo/MarketDAQ/actions/workflows/release.yml/badge.svg?branch=main&label=Windows%20Release&event=push)
-![MacOS Release](https://github.com/Wong-Woo/MarketDAQ/actions/workflows/release.yml/badge.svg?branch=main&label=macOS%20Release&event=push)
+[![Win RELEASE](https://github.com/Wong-Woo/MarketDAQ/actions/workflows/build.yml/badge.svg?branch=main&label=Windows%20RELEASE)](https://github.com/Wong-Woo/MarketDAQ/actions/workflows/build.yml)
+[![Linux RELEASE](https://github.com/Wong-Woo/MarketDAQ/actions/workflows/build.yml/badge.svg?branch=main&label=Linux%20RELEASE)](https://github.com/Wong-Woo/MarketDAQ/actions/workflows/build.yml)
+[![macOS RELEASE](https://github.com/Wong-Woo/MarketDAQ/actions/workflows/build.yml/badge.svg?branch=main&label=macOS%20RELEASE)](https://github.com/Wong-Woo/MarketDAQ/actions/workflows/build.yml)
 
 # MarketDAQ
 This is a program for plotting and analyzing time series data (like stock market data)
