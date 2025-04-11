@@ -1,0 +1,31 @@
+name: CMake Multi-Platform CI/CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        target: [RELEASE, TEST_IMGUI, TEST_CURL, TEST_FSTREAM, TEST_JSON]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup CMake (Linux/macOS only)
+        if: runner.os != 'Windows'
+        run: |
+          sudo apt-get update || true
+          sudo apt-get install -y cmake || true
+
+      - name: Configure CMake - ${{ matrix.target }}
+        run: cmake -D${{ matrix.target }}=ON -B build
+
+      - name: Build
+        run: cmake --build build

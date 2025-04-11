@@ -14,31 +14,31 @@ enum CurrencyUnit { USD, EUR, CNY, GBP, JPY, KRW, BTC };
 
 uint64_t date2timestamp(std::string date);
 
-class StockPrice {
+class StockCandle {
    public:
     uint64_t timestamp;
     double open, high, low, close, volume;
 
-    StockPrice(uint64_t timestamp, double open, double high, double low, double close, double volume)
+    StockCandle(uint64_t timestamp, double open, double high, double low, double close, double volume)
         : timestamp(timestamp),
           open(open),
           high(high),
           low(low),
           close(close),
           volume(volume) {}
-    StockPrice(const StockPrice &other) = default;
-    ~StockPrice() = default;
+    StockCandle(const StockCandle &other) = default;
+    ~StockCandle() = default;
 };
 
 class StockData {
    public:
     uint64_t last_updated_timestamp;
     std::string ticker;
-    std::vector<StockPrice> prices;
+    std::vector<StockCandle> prices;
     CurrencyUnit currency_unit;
     StockData(nlohmann::json &&stock_json)
         : ticker(stock_json["Meta Data"]["2. Symbol"]),
-          prices(std::vector<StockPrice>()) {
+          prices(std::vector<StockCandle>()) {
         // initialize last updated timestamp
         std::string last_updated_date =
             stock_json["Meta Data"]["3. Last Refreshed"].get<std::string>();
@@ -51,7 +51,7 @@ class StockData {
         auto stock_data_series = stock_json["Time Series (Daily)"];
         for (auto it = stock_data_series.begin(); it != stock_data_series.end();
              it++) {
-            StockPrice price(date2timestamp(it.key()),
+            StockCandle price(date2timestamp(it.key()),
                              std::stod((*it)["1. open"].get<std::string>()),
                              std::stod((*it)["2. high"].get<std::string>()),
                              std::stod((*it)["3. low"].get<std::string>()),
@@ -64,7 +64,7 @@ class StockData {
         : last_updated_timestamp(other.last_updated_timestamp),
           ticker(other.ticker),
           currency_unit(other.currency_unit),
-          prices(std::vector<StockPrice>(other.prices)) {}
+          prices(std::vector<StockCandle>(other.prices)) {}
     StockData(StockData &&other) noexcept
         : last_updated_timestamp(other.last_updated_timestamp),
           ticker(std::move(other.ticker)),

@@ -1,0 +1,5 @@
+sequenceDiagram
+    StockDataUpdater ->> data/stock: Data Check and Update(Once in an hour)
+    StockDataUpdater ->> data/stock: Set Data Updated Flag 
+    MarketDAQ ->> data/stock: Check Data Updated Flag
+    MarketDAQ ->> MarketDAQ: Show Data to user

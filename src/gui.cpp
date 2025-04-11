@@ -3,16 +3,21 @@
 #include "imgui.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
-
 #include "imgui.h"
 #include "implot.h"
 
-void plot_window() {
-    ImPlot::CreateContext();
-    ImGui::Begin("Plot");
+void get_window_config() {
+    ImGuiIO& io = ImGui::GetIO();
+    float screen_width = io.DisplaySize.x;
+    float screen_height = io.DisplaySize.y;
+}
 
-    ImGui::End();
+void plot_window() {
+    ImGui::Begin("Plot");
+    ImPlot::CreateContext();
+    
     ImPlot::DestroyContext();
+    ImGui::End();
 }
 
 void select_window() {

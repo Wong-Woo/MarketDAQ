@@ -1,4 +1,4 @@
-#include "type.h"
+#include "stock_data.h"
 
 uint64_t date2timestamp(std::string date)
 {

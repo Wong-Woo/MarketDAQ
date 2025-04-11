@@ -2,7 +2,6 @@
 #include "imgui.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
-// #include <stdio.h>
 #include "single_include/nlohmann/json.hpp"
 #include "gui.h"
 
@@ -49,7 +48,7 @@ int main() {
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        // ImGui 데모 창 표시
+        // Windows
         plot_window();
         select_window();
         news_window();
