@@ -30,9 +30,13 @@ jobs:
             libxkbcommon-dev || true
           git clone https://github.com/glfw/glfw.git
           cd glfw
-          cmake -B build -S . -DBUILD_SHARED_LIBS=ON -DGLFW_USE_WAYLAND=OFF
+          cmake -B build -S . \
+            -DBUILD_SHARED_LIBS=ON \
+            -DGLFW_BUILD_WAYLAND=OFF \
+            -DGLFW_BUILD_X11=ON
           sudo cmake --install build
           cd ..
+      
 
       - name: Install Dependencies (Windows)
         if: runner.os == 'Windows'
