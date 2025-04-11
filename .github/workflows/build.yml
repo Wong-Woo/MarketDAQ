@@ -21,8 +21,11 @@ jobs:
       - name: Install CMake on Ubuntu
         if: runner.os == 'Linux'
         run: |
+          sudo rm -f /etc/apt/apt-mirrors.txt || true
+          sudo apt-get clean
           sudo apt-get update
           sudo DEBIAN_FRONTEND=noninteractive apt-get install -y cmake
+        
 
       - name: Install CMake on macOS
         if: runner.os == 'macOS'
