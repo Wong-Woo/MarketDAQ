@@ -20,11 +20,32 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Install Dependencies (Linux/macOS)
+        if: runner.os != 'Windows'
+        run: |
+          sudo apt-get update || true
+          sudo apt-get install -y xorg-dev libglu1-mesa-dev || true
+          git clone https://github.com/glfw/glfw.git
+          cd glfw
+          cmake -B build -S . -DBUILD_SHARED_LIBS=ON
+          sudo cmake --install build
+          cd ..
+
+      - name: Install Dependencies (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          git clone https://github.com/glfw/glfw.git
+          cd glfw
+          cmake -B build -S . -DBUILD_SHARED_LIBS=ON
+          cmake --install build
+          cd ..
+
       - name: Configure CMake
         run: >
           cmake -B build -S . 
           -D${{ matrix.target }}=ON 
-          -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_BUILD_TYPE=Release 
+          -DCMAKE_PREFIX_PATH="/usr/local"
 
       - name: Build
         run: cmake --build build --config Release
