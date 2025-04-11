@@ -18,11 +18,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup CMake (Linux/macOS only)
-        if: runner.os != 'Windows'
+      - name: Install CMake on Ubuntu
+        if: runner.os == 'Linux'
         run: |
-          sudo apt-get update || true
-          sudo apt-get install -y cmake || true
+          sudo apt-get update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y cmake
+
+      - name: Install CMake on macOS
+        if: runner.os == 'macOS'
+        run: |
+          brew update
+          brew install cmake
 
       - name: Configure CMake - ${{ matrix.target }}
         run: cmake -D${{ matrix.target }}=ON -B build

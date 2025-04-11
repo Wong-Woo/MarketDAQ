@@ -5,13 +5,6 @@
 # MarketDAQ
 This is a program for plotting and analyzing time series data (like stock market data)
 
-
-
-## Build
-### Window
-### Linux
-### Mac
-
 ## Usage
 ### Window
 ### Linux
