@@ -1,4 +1,4 @@
-name: CMake Multi-Platform CI/CD
+name: CMake Build Matrix
 
 on:
   push:
@@ -8,33 +8,23 @@ on:
 
 jobs:
   build:
+    name: Build on ${{ matrix.os }} - Target: ${{ matrix.target }}
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         target: [RELEASE, TEST_IMGUI, TEST_CURL, TEST_FSTREAM, TEST_JSON]
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Install CMake on Ubuntu
-        if: runner.os == 'Linux'
-        run: |
-          sudo rm -f /etc/apt/apt-mirrors.txt || true
-          sudo apt-get clean
-          sudo apt-get update
-          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y cmake
-        
-
-      - name: Install CMake on macOS
-        if: runner.os == 'macOS'
-        run: |
-          brew update
-          brew install cmake
-
-      - name: Configure CMake - ${{ matrix.target }}
-        run: cmake -D${{ matrix.target }}=ON -B build
+      - name: Configure CMake
+        run: >
+          cmake -B build -S . 
+          -D${{ matrix.target }}=ON 
+          -DCMAKE_BUILD_TYPE=Release
 
       - name: Build
-        run: cmake --build build
+        run: cmake --build build --config Release
