@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 # build option
 option(RELEASE "Build RELEASE" OFF)
 option(TEST_IMGUI "Build TEST_IMGUI" OFF)
-option(TEST_IMGUI "Build TEST_CURL" OFF)
+option(TEST_CURL "Build TEST_CURL" OFF)
 option(TEST_FSTREAM "Build TEST_FSTREAM" OFF)
 option(TEST_JSON "Build TEST_JSON" OFF)
 
