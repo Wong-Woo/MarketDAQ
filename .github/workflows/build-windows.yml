@@ -1,0 +1,55 @@
+# .github/workflows/cmake_build.yml
+
+name: build-windows # 워크플로우 이름
+
+on:
+  push:
+    branches: [ "main" ] # main 브랜치 push 시 실행
+  pull_request:
+    branches: [ "main" ] # main 브랜치로 PR 시 실행
+  workflow_dispatch: # 수동 실행 가능
+
+jobs:
+  build:
+    # 매트릭스를 사용하여 실행 환경 및 빌드 옵션 정의
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false # 다른 매트릭스 빌드가 실패해도 나머지 빌드는 계속 진행
+      matrix:
+        os: [windows-latest] # 실행 OS (현재는 Windows만)
+        include: # OS별 특정 설정 조합
+          - os: windows-latest
+            cmake_generator: "Visual Studio 17 2022" # 사용할 CMake Generator 지정
+            cmake_arch: "x64" # 빌드 아키텍처
+            cmake_options: "-DRELEASE=ON" # CMakeLists.txt의 RELEASE 옵션 활성화
+            build_config: "Release" # 빌드 설정 (Visual Studio용)
+
+    steps:
+    # 1. 코드 체크아웃 (서브모듈 포함)
+    # 'lib' 디렉토리가 서브모듈(ImGui, curl 등)을 포함하고 있을 가능성이 높으므로 recursive 옵션 사용
+    - name: Checkout repository including submodules
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Configure CMake
+      run: |
+        cmake -S . -B build -G "${{ matrix.cmake_generator }}" -A ${{ matrix.cmake_arch }} ${{ matrix.cmake_options }}
+      shell: cmd # Windows 환경이므로 cmd 쉘 사용 권장
+
+    # 4. CMake 빌드 단계
+    #    - '--build' 옵션으로 빌드 디렉토리 지정
+    #    - '--config' 옵션으로 빌드 설정 (Release/Debug 등) 지정 (Visual Studio 같은 Multi-config Generator에 필수)
+    - name: Build project
+      run: cmake --build build --config ${{ matrix.build_config }}
+      shell: cmd # Windows 환경이므로 cmd 쉘 사용 권장
+
+    # 5. (선택 사항) 빌드 결과물(아티팩트) 업로드
+    #    - 빌드가 성공하면 실행 파일을 아티팩트로 저장하여 다운로드 가능하게 함
+    - name: Upload artifact (Windows)
+      if: runner.os == 'Windows' && success() # Windows 환경이고 빌드가 성공했을 때만 실행
+      uses: actions/upload-artifact@v4
+      with:
+        name: MarketDAQ-${{ matrix.os }}-${{ matrix.build_config }} # 아티팩트 이름 (OS와 빌드 설정 포함)
+        # Visual Studio 생성기는 빌드 설정 이름의 하위 디렉토리에 결과물을 만듦
+        path: build/${{ matrix.build_config }}/MarketDAQ.exe # 실제 생성된 실행 파일 경로 확인 필요
