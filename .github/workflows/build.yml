@@ -41,12 +41,13 @@ jobs:
     - name: Install prerequisites (Windows)
       if: runner.os == 'Windows'
       run: |
-        # choco로 curl과 glfw 개발 라이브러리 설치. CMake는 사전 설치된 것을 사용.
-        choco install curl glfw-development --yes --force --ignore-checksums
+        # choco로 curl 먼저 설치
+        choco install curl --yes --force --ignore-checksums
+        # choco로 glfw 설치 시도 (분리해서 실행)
+        choco install glfw --yes --force --ignore-checksums
 
     # --- CMake 구성 및 빌드 단계는 동일 ---
     - name: Configure CMake
-      # 이 단계에서 시스템에 있는 cmake.exe를 찾아서 실행해야 함
       run: |
         cmake -B build ${{ matrix.cmake_options }} -DCMAKE_BUILD_TYPE=${{ matrix.build_config }}
 
