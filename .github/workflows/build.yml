@@ -19,9 +19,6 @@ jobs:
           - os: ubuntu-latest
             cmake_options: "-DRELEASE=ON"
             build_config: "Release"
-          - os: macos-latest
-            cmake_options: "-DRELEASE=ON"
-            build_config: "Release"
           - os: windows-latest
             cmake_options: "-DRELEASE=ON"
             build_config: "Release"

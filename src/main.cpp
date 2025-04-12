@@ -1,7 +1,24 @@
-#include <GLFW/glfw3.h>
 #include "imgui.h"
+
+#if defined(_WIN32)
+// Windows: ImGui + DirectX11 + Win32
+#include "backends/imgui_impl_win32.h"
+#include "backends/imgui_impl_dx11.h"
+
+#elif defined(__APPLE__)
+// macOS: ImGui + Metal + GLFW
+#include "backends/imgui_impl_glfw.h"
+#include "backends/imgui_impl_metal.h"
+
+#elif defined(__linux__)
+// Linux: ImGui + OpenGL + GLFW
+#include <GLFW/glfw3.h>
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
+#else
+#error "Unsupported platform for ImGui backend"
+#endif
+
 #include "single_include/nlohmann/json.hpp"
 #include "gui.h"
 
