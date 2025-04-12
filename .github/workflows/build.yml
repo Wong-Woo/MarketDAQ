@@ -41,13 +41,12 @@ jobs:
     - name: Install prerequisites (Windows)
       if: runner.os == 'Windows'
       run: |
-        # choco로 curl, glfw, cmake 설치. cmake는 PATH에 추가되도록 --params 사용
-        choco install curl glfw cmake --params="'/AddToPath:System'" --yes --force --ignore-checksums
-        # 수동 PATH 조작 제거 - choco가 처리하도록 의존
-        # echo "..." | Out-File ... 부분 삭제됨
+        # choco로 curl, glfw만 설치. CMake는 사전 설치된 것을 사용하도록 시도.
+        choco install curl glfw --yes --force --ignore-checksums
 
     # --- CMake 구성 및 빌드 단계는 동일 ---
     - name: Configure CMake
+      # 이 단계에서 시스템에 있는 cmake.exe를 찾아서 실행해야 함
       run: |
         cmake -B build ${{ matrix.cmake_options }} -DCMAKE_BUILD_TYPE=${{ matrix.build_config }}
 
