@@ -1,5 +1,3 @@
-# .github/workflows/cmake_build.yml
-
 name: build-linux
 
 on:

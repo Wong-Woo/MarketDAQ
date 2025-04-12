@@ -1,5 +1,3 @@
-# .github/workflows/cmake_build.yml
-
 name: build-windows # 워크플로우 이름
 
 on:
