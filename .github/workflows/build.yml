@@ -41,9 +41,10 @@ jobs:
     - name: Install prerequisites (Windows)
       if: runner.os == 'Windows'
       run: |
-        # curl과 glfw 설치 (choco 사용 예시)
-        choco install curl glfw cmake --installargs 'ADD_CMAKE_TO_PATH=System'
-        echo "C:\Program Files\CMake\bin;C:\Program Files\Git\cmd;C:\ProgramData\chocolatey\bin;C:\tools\glfw\lib-vc2019" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append # glfw 경로 예시, 실제 경로 확인 필요
+        # choco로 curl, glfw, cmake 설치. cmake는 PATH에 추가되도록 --params 사용
+        choco install curl glfw cmake --params="'/AddToPath:System'" --yes --force --ignore-checksums
+        # 수동 PATH 조작 제거 - choco가 처리하도록 의존
+        # echo "..." | Out-File ... 부분 삭제됨
 
     # --- CMake 구성 및 빌드 단계는 동일 ---
     - name: Configure CMake
