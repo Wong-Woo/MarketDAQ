@@ -43,8 +43,8 @@ jobs:
       run: |
         # choco로 curl 먼저 설치
         choco install curl --yes --force --ignore-checksums
-        # choco로 glfw 설치 시도 (분리해서 실행)
-        choco install glfw --yes --force --ignore-checksums
+        # choco로 glfw3 설치 시도 (수정됨)
+        choco install glfw3 --yes --force --ignore-checksums
 
     # --- CMake 구성 및 빌드 단계는 동일 ---
     - name: Configure CMake
