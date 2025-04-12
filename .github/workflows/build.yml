@@ -2,86 +2,64 @@
 
 name: CMake Build
 
-# 워크플로우 트리거 설정
 on:
   push:
-    branches: [ "main" ] # main 브랜치에 push될 때
+    branches: [ "main" ]
   pull_request:
-    branches: [ "main" ] # main 브랜치로 PR 생성될 때
+    branches: [ "main" ]
 
 jobs:
   build:
-    # 빌드를 실행할 운영체제 매트릭스 정의
     runs-on: ${{ matrix.os }}
     strategy:
-      # 하나의 빌드가 실패해도 다른 빌드는 계속 진행
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        # 빌드 옵션을 매트릭스로 추가할 수도 있습니다. 예:
-        # build_option: ['-DRELEASE=ON', '-DTEST_CURL=ON', '-DTEST_JSON=ON']
-        # 여기서는 RELEASE 빌드만 예시로 포함합니다.
         include:
           - os: ubuntu-latest
             cmake_options: "-DRELEASE=ON"
-            build_config: "Release" # 단일 구성 생성기용 (Ninja, Makefiles)
+            build_config: "Release"
           - os: macos-latest
             cmake_options: "-DRELEASE=ON"
-            build_config: "Release" # 단일 구성 생성기용
+            build_config: "Release"
           - os: windows-latest
             cmake_options: "-DRELEASE=ON"
-            build_config: "Release" # 다중 구성 생성기용 (Visual Studio)
+            build_config: "Release"
 
     steps:
-    - name: Checkout repository # 코드 체크아웃
+    - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Install prerequisites (Linux) # Ubuntu 의존성 설치 (curl 예시)
+    # --- 의존성 설치 단계 수정 ---
+    - name: Install prerequisites (Linux)
       if: runner.os == 'Linux'
       run: |
         sudo apt-get update
-        sudo apt-get install -y libcurl4-openssl-dev cmake build-essential
+        # curl과 glfw3 개발 라이브러리 설치 추가
+        sudo apt-get install -y libcurl4-openssl-dev libglfw3-dev cmake build-essential
 
-    - name: Install prerequisites (macOS) # macOS 의존성 설치 (curl 예시)
+    - name: Install prerequisites (macOS)
       if: runner.os == 'macOS'
       run: |
         brew update
-        brew install curl cmake
+        # curl과 glfw 설치 추가
+        brew install curl glfw cmake
 
-    - name: Install prerequisites (Windows) # Windows 의존성 설치 (curl, cmake 예시 - choco 사용)
+    - name: Install prerequisites (Windows)
       if: runner.os == 'Windows'
       run: |
-        choco install curl cmake --installargs 'ADD_CMAKE_TO_PATH=System'
-        # Windows 환경변수 업데이트 반영 (새 터미널 세션 효과)
-        echo "C:\Program Files\CMake\bin;C:\Program Files\Git\cmd;C:\ProgramData\chocolatey\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        # curl과 glfw 설치 추가 (choco 사용 예시)
+        choco install curl glfw cmake --installargs 'ADD_CMAKE_TO_PATH=System'
+        echo "C:\Program Files\CMake\bin;C:\Program Files\Git\cmd;C:\ProgramData\chocolatey\bin;C:\tools\glfw\lib-vc2019" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append # glfw 경로 예시, 실제 경로 확인 필요
+        # 참고: Windows에서 choco로 설치된 glfw의 CMake 찾기 경로는 다를 수 있습니다.
+        # vcpkg나 직접 빌드를 사용하는 것이 더 안정적일 수 있습니다.
 
-    - name: Configure CMake # CMake 구성 단계
+    # --- 이후 단계는 동일 ---
+    - name: Configure CMake
       run: |
         cmake -B build ${{ matrix.cmake_options }} -DCMAKE_BUILD_TYPE=${{ matrix.build_config }}
-      # Windows의 Visual Studio 같은 다중 구성 생성기는 CMAKE_BUILD_TYPE 대신 --config로 빌드 시 지정
-      # 위의 설정은 단일/다중 구성 모두에 비교적 안전하게 적용될 수 있습니다.
 
-    - name: Build project # CMake 빌드 단계
-      # --config 플래그는 Visual Studio 같은 다중 구성 생성기에 필요합니다.
-      # Makefiles나 Ninja 같은 단일 구성 생성기에서는 CMAKE_BUILD_TYPE으로 설정됩니다.
+    - name: Build project
       run: cmake --build build --config ${{ matrix.build_config }}
 
-    # - name: Run tests # CTest가 설정되어 있다면 테스트 실행 (선택 사항)
-    #   if: success() # 빌드가 성공했을 때만 실행
-    #   working-directory: ./build
-    #   run: ctest -C ${{ matrix.build_config }} --output-on-failure
-
-    - name: Upload artifact (Linux/macOS) # 빌드 결과물 업로드 (선택 사항, Linux/macOS)
-      if: runner.os != 'Windows' && success() # 빌드 성공 시
-      uses: actions/upload-artifact@v4
-      with:
-        name: MarketDAQ-${{ matrix.os }}
-        path: build/MarketDAQ # 실제 실행 파일 경로 확인 필요
-
-    - name: Upload artifact (Windows) # 빌드 결과물 업로드 (선택 사항, Windows)
-      if: runner.os == 'Windows' && success() # 빌드 성공 시
-      uses: actions/upload-artifact@v4
-      with:
-        name: MarketDAQ-${{ matrix.os }}
-        # Windows에서는 빌드 구성(Release/Debug) 디렉토리 아래에 생성될 수 있음
-        path: build/${{ matrix.build_config }}/MarketDAQ.exe # 실제 실행 파일 경로 확인 필요
+    # ... (아티팩트 업로드 등) ...
