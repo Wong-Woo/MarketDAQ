@@ -1,4 +1,4 @@
-![Win RELEASE]![Workflow Name](https://github.com/Wong-Woo/MarketDAQ/actions/workflows/build-windows.yml/badge.svg)
+![Win RELEASE](https://github.com/Wong-Woo/MarketDAQ/actions/workflows/build-windows.yml/badge.svg)
 ![Linux RELEASE](https://github.com/Wong-Woo/MarketDAQ/actions/workflows/build-linux.yml/badge.svg)
 
 # MarketDAQ
