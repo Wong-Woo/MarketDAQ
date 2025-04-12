@@ -14,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, windows-latest]
         include:
           - os: ubuntu-latest
             cmake_options: "-DRELEASE=ON"
@@ -38,13 +38,6 @@ jobs:
         # curl과 glfw3 개발 라이브러리 설치
         sudo apt-get install -y libcurl4-openssl-dev libglfw3-dev cmake build-essential
 
-    - name: Install prerequisites (macOS)
-      if: runner.os == 'macOS'
-      run: |
-        brew update
-        # curl과 glfw 설치
-        brew install curl glfw cmake
-
     - name: Install prerequisites (Windows)
       if: runner.os == 'Windows'
       run: |
@@ -62,7 +55,7 @@ jobs:
 
     # ... (선택적 테스트 및 아티팩트 업로드 단계) ...
 
-    - name: Upload artifact (Linux/macOS) # 빌드 결과물 업로드 (선택 사항, Linux/macOS)
+    - name: Upload artifact (Linux) # 빌드 결과물 업로드 (선택 사항, Linux/macOS)
       if: runner.os != 'Windows' && success() # 빌드 성공 시
       uses: actions/upload-artifact@v4
       with:
