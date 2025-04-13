@@ -3,20 +3,20 @@
 #include "single_include/nlohmann/json.hpp"
 
 int main() {
-    ImGUIBackend_Interface* backend = CreateBackend();
-    if (!backend) {
+    ImGUIBackend_Interface* imgui_backend = CreateBackend();
+    if (!imgui_backend) {
         std::cerr << "백엔드 생성 실패!\n";
         return -1;
     }
 
-    backend->initialize();
+    imgui_backend->initialize();
 
     // 메인 루프
     while (true) {
-        backend->renderUI();
+        imgui_backend->renderUI();
     }
 
-    backend->cleanup();
-    delete backend;
+    imgui_backend->cleanup();
+    delete imgui_backend;
     return 0;
 }
