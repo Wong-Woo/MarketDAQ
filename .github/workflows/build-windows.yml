@@ -8,19 +8,32 @@ jobs:
   build:
     runs-on: windows-latest
 
+    defaults:
+      run:
+        shell: pwsh
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up vcpkg
+      - name: Install vcpkg and required libraries
         run: |
           git clone https://github.com/microsoft/vcpkg.git
           .\vcpkg\bootstrap-vcpkg.bat
           .\vcpkg\vcpkg install curl
 
-      - name: Configure with CMake (using vcpkg toolchain)
+      - name: Configure with CMake (Release + TEST_CURL 예시)
         run: |
-          cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}\vcpkg\scripts\buildsystems\vcpkg.cmake
+          cmake -B build -S . `
+            -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}\vcpkg\scripts\buildsystems\vcpkg.cmake `
+            -DRELEASE=OFF `
+            -DTEST_CURL=ON `
+            -DTEST_IMGUI=OFF `
+            -DTEST_FSTREAM=OFF `
+            -DTEST_JSON=OFF
 
       - name: Build
         run: cmake --build build --config Release
+
+      - name: Run TEST_CURL (예시 실행)
+        run: .\build\Release\MarketDAQ.exe
