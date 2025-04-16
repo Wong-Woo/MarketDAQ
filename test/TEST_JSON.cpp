@@ -3,7 +3,7 @@
 
 #include "config.h"
 #include "single_include/nlohmann/json.hpp"
-#include "stock_data.h"
+#include "model/stock_data.h"
 
 int main() {
 

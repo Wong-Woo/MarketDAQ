@@ -6,7 +6,7 @@
 #include "imgui.h"
 #include "backends/imgui_impl_win32.h"
 #include "backends/imgui_impl_dx11.h"
-#include "../imgui_frontend/gui.h"
+#include "../imgui_frontend/layout.h"
 
 // 링크할 라이브러리
 #pragma comment(lib, "d3d11.lib")
@@ -14,14 +14,14 @@
 // Win32 윈도우 핸들 관리
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-class WindowsBackend : public IBackend {
+class ImguiWindows : public iImGUIBackend {
 public:
     void Init() override {
         // 윈도우 클래스 등록
         WNDCLASSEX wc = {
             sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L,
             GetModuleHandle(NULL), NULL, NULL, NULL, NULL,
-            L"ImGui Example", NULL
+            L"MarketDAQ", NULL
         };
         ::RegisterClassEx(&wc);
 
@@ -67,7 +67,7 @@ public:
         ImGui_ImplWin32_NewFrame();
         ImGui::NewFrame();
 
-        window_layout(); // Front-end
+        layout(); // Front-end
 
         ImGui::Render();
         const float clear_color_with_alpha[4] = { 0.1f, 0.1f, 0.1f, 1.0f };
@@ -86,7 +86,7 @@ public:
         CleanupDeviceD3D();
 
         ::DestroyWindow(hwnd);
-        ::UnregisterClass(L"ImGui Example", GetModuleHandle(NULL));
+        ::UnregisterClass(L"MarketDAQ", GetModuleHandle(NULL));
     }
 
 private:
@@ -160,6 +160,6 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
     return ::DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
-ImGUIBackend_Interface* CreateBackend() {
-    return new WindowsBackend();
+std::unique_ptr<iImGUIBackend> CreateBackend() {
+    return std::make_unique<ImguiWindows>();
 }

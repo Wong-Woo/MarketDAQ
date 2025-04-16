@@ -2,9 +2,9 @@
 #include <GLFW/glfw3.h>
 #include "imgui.h"
 #include "implot.h"
-#include "gui.h"
+#include "layout.h"
 
-void window_layout() {
+void layout() {
     ImGuiIO& io = ImGui::GetIO();
     float screen_width = io.DisplaySize.x;
     float screen_height = io.DisplaySize.y;
@@ -25,7 +25,7 @@ void window_layout() {
 void plot_window() {
     ImGui::Begin("Plot");
     ImPlot::CreateContext();
-    
+
     ImPlot::DestroyContext();
     ImGui::End();
 }

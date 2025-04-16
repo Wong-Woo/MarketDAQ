@@ -14,7 +14,7 @@ set(BUILD_LIBRARIES)
 
 # dependency management by build option
 if(RELEASE)
-    list(APPEND BUILD_LIBRARIES imgui curl)
+    list(APPEND BUILD_LIBRARIES imgui curl timeconv)
 endif()
 if(TEST_IMGUI)
     list(APPEND BUILD_LIBRARIES imgui)
@@ -26,7 +26,7 @@ if(TEST_FSTREAM)
     list(APPEND BUILD_LIBRARIES json)
 endif()
 if(TEST_JSON)
-    list(APPEND BUILD_LIBRARIES json)
+    list(APPEND BUILD_LIBRARIES json timeconv)
 endif()
 
 # add library directory to project
@@ -36,13 +36,16 @@ add_subdirectory(lib)
 # target definition by option
 if(RELEASE)
     message(STATUS "EXECUTABLE TARGET: RELEASE")
-    add_executable(MarketDAQ src/main.cpp src/imgui_frontend/gui.cpp src/database/stock_data.cpp)
+    add_executable(MarketDAQ src/main.cpp 
+                             src/view/imgui_frontend/layout.cpp 
+                             src/model/stock_data.cpp
+                             )
     if (WIN32)
         message(STATUS "Using Windows backend")
-        target_sources(MarketDAQ PRIVATE src/imgui_backend/imgui_windows.cpp)
+        target_sources(MarketDAQ PRIVATE src/view/imgui_backend/imgui_windows.cpp)
     elseif(UNIX)
         message(STATUS "Using Linux backend")
-        target_sources(MarketDAQ PRIVATE src/imgui_backend/imgui_linux.cpp)
+        target_sources(MarketDAQ PRIVATE src/view/imgui_backend/imgui_linux.cpp)
     else()
         message(FATAL_ERROR "Unsupported platform")
     endif()
@@ -61,7 +64,7 @@ if(TEST_FSTREAM)
 endif()
 if(TEST_JSON)
     message(STATUS "EXECUTABLE TARGET: TEST_JSON")
-    add_executable(MarketDAQ test/TEST_JSON.cpp src/type.cpp)
+    add_executable(MarketDAQ test/TEST_JSON.cpp src/model/stock_data.cpp)
 endif()
 
 target_include_directories(MarketDAQ PUBLIC src/ include/ ${INCLUDE_DIRECTORIES})

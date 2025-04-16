@@ -1,9 +1,9 @@
 #ifndef IMGUI_BACKEND_H
 #define IMGUI_BACKEND_H
 
-class ImGUIBackend_Interface {
+class iImGUIBackend {
 public:
-    virtual ~ImGUIBackend_Interface() = default;
+    virtual ~iImGUIBackend() = default;
 
     // Initialize the backend
     virtual void initialize() = 0;
@@ -15,6 +15,6 @@ public:
     virtual void cleanup() = 0;
 };
 
-ImGUIBackend_Interface* CreateBackend();
+std::unique_ptr<iImGUIBackend> CreateBackend();
 
 #endif

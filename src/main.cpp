@@ -1,9 +1,10 @@
 #include <iostream>
-#include "imgui_backend/imgui_backend.h"
+#include <memory>
+#include "view/imgui_backend/imgui_backend.h"
 #include "single_include/nlohmann/json.hpp"
 
 int main() {
-    ImGUIBackend_Interface* imgui_backend = CreateBackend();
+    std::unique_ptr<iImGUIBackend> imgui_backend = CreateBackend();
     if (!imgui_backend) {
         std::cerr << "백엔드 생성 실패!\n";
         return -1;
@@ -17,6 +18,5 @@ int main() {
     }
 
     imgui_backend->cleanup();
-    delete imgui_backend;
     return 0;
 }

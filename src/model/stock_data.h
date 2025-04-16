@@ -1,4 +1,3 @@
-#include <chrono>
 #include <fstream>
 #include <iostream>
 #include <list>
@@ -7,12 +6,11 @@
 #include <string>
 #include <vector>
 
+#include "timeconv.h"
 #include "config.h"
 #include "single_include/nlohmann/json.hpp"
 
 enum CurrencyUnit { USD, EUR, CNY, GBP, JPY, KRW, BTC };
-
-uint64_t date2timestamp(std::string date);
 
 class StockCandle {
    public:

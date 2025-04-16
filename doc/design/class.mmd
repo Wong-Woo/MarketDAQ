@@ -2,23 +2,51 @@
 title: Class Diagram
 ---
 classDiagram
-    Animal <|-- Duck
-    Animal <|-- Fish
-    Animal <|-- Zebra
-    Animal : +int age
-    Animal : +String gender
-    Animal: +isMammal()
-    Animal: +mate()
-    class Duck{
-        +String beakColor
-        +swim()
-        +quack()
+    class iImGUIBackend {
+
     }
-    class Fish{
-        -int sizeInFeet
-        -canEat()
+    class ImGUIFrontend {
+
     }
-    class Zebra{
-        +bool is_wild
-        +run()
+    class ImGUILinux {
+
     }
+    class ImGUIWindows {
+
+    }
+    class ImGUI {
+
+    }
+
+    class StockCandle {
+
+    }
+    class StockData {
+        
+    }
+    class StockDataBase {
+        
+    }
+
+    class MacroData {
+
+    }
+    class NewsData {
+
+    }
+
+    class Plot {
+
+    }
+
+    class Layout {
+
+    }
+    iImGUIBackend <|.. ImGUILinux
+    iImGUIBackend <|.. ImGUIWindows
+    %% ImGUI <.. ImGUIWindows
+    %% ImGUI <.. ImGUILinux
+    Layout <.. ImGUIFrontend
+    Layout <.. iImGUIBackend
+    StockCandle <-- StockData
+    StockData <-- StockDataBase

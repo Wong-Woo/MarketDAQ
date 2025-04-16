@@ -1,12 +1,13 @@
 #include <iostream>
+#include <memory>
 #include <GLFW/glfw3.h>
 #include "imgui.h"
 #include "imgui_backend.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
-#include "../imgui_frontend/gui.h"
+#include "../imgui_frontend/layout.h"
 
-class LinuxBackend : public ImGUIBackend_Interface {
+class ImGUILinux : public iImGUIBackend {
 public:
     void initialize() override {
         // GLFW 초기화
@@ -51,7 +52,7 @@ public:
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        window_layout(); // Front-end
+        layout(); // Front-end
 
         ImGui::Render();
         int display_w, display_h;
@@ -79,6 +80,6 @@ private:
     GLFWwindow* window = nullptr;
 };
 
-ImGUIBackend_Interface* CreateBackend() {
-    return new LinuxBackend();
+std::unique_ptr<iImGUIBackend> CreateBackend() {
+    return std::make_unique<ImGUILinux>();
 }
