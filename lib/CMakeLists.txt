@@ -63,17 +63,6 @@ endif()
 # JSON
 list(APPEND INCLUDE_DIRECTORIES lib/json)
 
-# TIME
-list(FIND BUILD_LIBRARIES timeconv timeconv_index)
-if(${timeconv_index} GREATER_EQUAL 0)
-    message("LIBRARY TARGET: TIMECONV")
-    add_library(timeconv STATIC timeconv/timeconv.cpp)
-    
-    list(APPEND INCLUDE_DIRECTORIES lib/timeconv)
-    list(APPEND LINK_DIRECTORIES ${CMAKE_BINARY_DIR}/lib/timeconv)
-    list(APPEND LINK_LIBRARIES timeconv)
-endif()
-
 # make directory configuration shared with parent cmake file.
 set(INCLUDE_DIRECTORIES ${INCLUDE_DIRECTORIES} PARENT_SCOPE)
 set(LINK_DIRECTORIES ${LINK_DIRECTORIES} PARENT_SCOPE)

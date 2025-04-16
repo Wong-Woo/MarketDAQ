@@ -14,7 +14,7 @@ set(BUILD_LIBRARIES)
 
 # dependency management by build option
 if(RELEASE)
-    list(APPEND BUILD_LIBRARIES imgui curl timeconv)
+    list(APPEND BUILD_LIBRARIES imgui curl)
 endif()
 if(TEST_IMGUI)
     list(APPEND BUILD_LIBRARIES imgui)
@@ -26,7 +26,7 @@ if(TEST_FSTREAM)
     list(APPEND BUILD_LIBRARIES json)
 endif()
 if(TEST_JSON)
-    list(APPEND BUILD_LIBRARIES json timeconv)
+    list(APPEND BUILD_LIBRARIES json)
 endif()
 
 # add library directory to project
@@ -39,6 +39,7 @@ if(RELEASE)
     add_executable(MarketDAQ src/main.cpp 
                              src/view/imgui_frontend/layout.cpp 
                              src/model/stock_data.cpp
+                             src/common/timeconv/timeconv.cpp
                              )
     if (WIN32)
         message(STATUS "Using Windows backend")
@@ -64,7 +65,7 @@ if(TEST_FSTREAM)
 endif()
 if(TEST_JSON)
     message(STATUS "EXECUTABLE TARGET: TEST_JSON")
-    add_executable(MarketDAQ test/TEST_JSON.cpp src/model/stock_data.cpp)
+    add_executable(MarketDAQ test/TEST_JSON.cpp src/model/stock_data.cpp src/common/timeconv/timeconv.cpp)
 endif()
 
 target_include_directories(MarketDAQ PUBLIC src/ include/ ${INCLUDE_DIRECTORIES})
