@@ -4,6 +4,8 @@
 #include <regex>
 #include <string>
 #include <iomanip>
+#include <sstream>
+#include <memory>
 
 uint64_t date2timestamp(std::string date)
 {

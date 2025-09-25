@@ -55,9 +55,17 @@ endif()
 list(FIND BUILD_LIBRARIES curl curl_index)
 if(${curl_index} GREATER_EQUAL 0)
     message("LIBRARY TARGET: CURL")
-    find_package(CURL REQUIRED)
 
-    list(APPEND LINK_LIBRARIES curl)
+    if(WIN32)
+        # Windows에서는 winhttp 사용하도록 설정
+        list(APPEND LINK_LIBRARIES winhttp)
+        message(STATUS "Using winhttp for Windows instead of CURL")
+    else()
+        # Linux에서는 CURL 사용
+        find_package(CURL REQUIRED)
+        list(APPEND LINK_LIBRARIES ${CURL_LIBRARIES})
+        list(APPEND INCLUDE_DIRECTORIES ${CURL_INCLUDE_DIRS})
+    endif()
 endif()
 
 # JSON

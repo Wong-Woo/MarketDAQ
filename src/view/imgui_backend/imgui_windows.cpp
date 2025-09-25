@@ -12,22 +12,24 @@
 #pragma comment(lib, "d3d11.lib")
 
 // Win32 윈도우 핸들 관리
+// ImGui Win32 WndProc handler 전방 선언
+extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 class ImguiWindows : public iImGUIBackend {
 public:
-    void Init() override {
+    void initialize() override {
         // 윈도우 클래스 등록
         WNDCLASSEX wc = {
             sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L,
             GetModuleHandle(NULL), NULL, NULL, NULL, NULL,
-            L"MarketDAQ", NULL
+            "MarketDAQ", NULL
         };
         ::RegisterClassEx(&wc);
 
         // 윈도우 생성
-        hwnd = ::CreateWindowW(
-            wc.lpszClassName, L"MarketDAQ",
+        hwnd = ::CreateWindow(
+            wc.lpszClassName, "MarketDAQ",
             WS_OVERLAPPEDWINDOW, 100, 100, 1280, 720,
             NULL, NULL, wc.hInstance, NULL);
 
@@ -53,7 +55,7 @@ public:
         ImGui_ImplDX11_Init(pd3dDevice, pd3dDeviceContext);
     }
 
-    void Render() override {
+    void renderUI() override {
         MSG msg;
         while (::PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE)) {
             ::TranslateMessage(&msg);
@@ -78,7 +80,7 @@ public:
         g_pSwapChain->Present(1, 0); // vsync
     }
 
-    void Shutdown() override {
+    void cleanup() override {
         ImGui_ImplDX11_Shutdown();
         ImGui_ImplWin32_Shutdown();
         ImGui::DestroyContext();
@@ -86,7 +88,7 @@ public:
         CleanupDeviceD3D();
 
         ::DestroyWindow(hwnd);
-        ::UnregisterClass(L"MarketDAQ", GetModuleHandle(NULL));
+        ::UnregisterClass("MarketDAQ", GetModuleHandle(NULL));
     }
 
 private:

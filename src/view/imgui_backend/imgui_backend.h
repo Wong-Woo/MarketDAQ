@@ -1,6 +1,8 @@
 #ifndef IMGUI_BACKEND_H
 #define IMGUI_BACKEND_H
 
+#include <memory>
+
 class iImGUIBackend {
 public:
     virtual ~iImGUIBackend() = default;

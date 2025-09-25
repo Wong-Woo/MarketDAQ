@@ -1,8 +1,14 @@
 #include <cmath>
-#include <GLFW/glfw3.h>
 #include "imgui.h"
 #include "implot.h"
 #include "layout.h"
+
+#ifdef _WIN32
+    // Windows - DirectX 백엔드 사용
+#else
+    // Linux - GLFW 백엔드 사용
+    #include <GLFW/glfw3.h>
+#endif
 
 void layout() {
     ImGuiIO& io = ImGui::GetIO();
